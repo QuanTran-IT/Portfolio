@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Portfolio of Tran Le Anh Quan - Java Backend Developer specializing in Spring Boot, REST APIs, and Database Architecture.">
+    <title th:text="${name} + ' | ' + ${title}">Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- Favicon (Code SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'><path d='M8.59 16.59L4 12l4.59-4.59L10 8.82 6.83 12 10 15.18l-1.41 1.41zm6.82 0L20 12l-4.59-4.59L14 8.82 17.17 12 14 15.18l1.41 1.41z'/></svg>">
+</head>
+<body>
+
+<!-- Ambient Glow Background Spots -->
+<div class="ambient-glow ambient-glow-1" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow-2" aria-hidden="true"></div>
+
+<!-- ==========================================================================
+     NAVIGATION
+     ========================================================================== -->
+<header class="site-nav">
+    <div class="container nav-container">
+        <a class="nav-brand" href="#top" aria-label="Home">
+            <span class="nav-brand-avatar">&lt;/&gt;</span>
+            <span th:text="${name}">Portfolio</span>
+        </a>
+
+        <nav>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class="nav-link" href="#about">About</a></li>
+                <li><a class="nav-link" href="#skills">Tech Stack</a></li>
+                <li><a class="nav-link" href="#projects">Projects</a></li>
+                <li><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Theme Switcher Toggle (Dark / Light) -->
+            <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">
+                <!-- Sun Icon for Light Mode -->
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon for Dark Mode -->
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
+            <!-- GitHub Link if available -->
+            <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="GitHub Profile">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+
+            <!-- Mobile Hamburger Button -->
+            <button class="mobile-toggle" id="mobileMenuToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ==========================================================================
+     HERO SECTION
+     ========================================================================== -->
+<section class="hero-section" id="top">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <!-- Availability Badge -->
+            <div class="status-badge">
+                <span class="pulse-dot"></span>
+                <span>Available for new opportunities</span>
+            </div>
+
+            <h1 class="hero-name">
+                Hi, I'm <span class="gradient-text" th:text="${name}">Your Name</span>
+            </h1>
+
+            <div class="hero-title">
+                <span th:text="${title}">Java Backend Developer</span>
+                <span class="hero-title-separator">•</span>
+                <span style="font-size: 0.9em; opacity: 0.85;">Spring Boot Specialist</span>
+            </div>
+
+            <p class="hero-desc">
+                Crafting robust backend services, scalable RESTful architectures, and reliable database systems. Passionate about clean code, high reliability, and system design.
+            </p>
+
+            <div class="hero-cta">
+                <a class="btn btn-primary" href="#projects">
+                    <span>Explore Projects</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a class="btn btn-secondary" href="#contact">
+                    <span>Get in Touch</span>
+                </a>
+            </div>
+
+            <!-- Quick Highlight Badges -->
+            <div class="hero-highlights">
+                <div class="highlight-item">
+                    <span class="highlight-number">Java &amp; Spring</span>
+                    <span class="highlight-label">Core Specialization</span>
+                </div>
+                <div class="highlight-item">
+                    <span class="highlight-number">RESTful APIs</span>
+                    <span class="highlight-label">Clean Architecture</span>
+                </div>
+                <div class="highlight-item">
+                    <span class="highlight-number">Relational DB</span>
+                    <span class="highlight-label">Schema &amp; Optimization</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal / API Response Mock Card -->
+        <div class="hero-terminal">
+            <div class="terminal-card">
+                <div class="terminal-bar">
+                    <div class="terminal-dots">
+                        <span class="terminal-dot dot-red"></span>
+                        <span class="terminal-dot dot-yellow"></span>
+                        <span class="terminal-dot dot-green"></span>
+                    </div>
+                    <span class="terminal-title">developer-profile.json</span>
+                    <button class="copy-json-btn" id="copyJsonBtn" type="button" title="Copy JSON payload">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span>Copy</span>
+                    </button>
+                </div>
+
+                <div class="terminal-request">
+                    <div class="req-left">
+                        <span class="http-method">GET</span>
+                        <span class="http-endpoint">/api/v1/developer/me</span>
+                    </div>
+                    <div class="http-status">
+                        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+                        <span>200 OK (21ms)</span>
+                    </div>
+                </div>
+
+                <pre class="terminal-code" id="jsonOutput"><span class="code-bracket">{</span>
+<span class="code-indent"><span class="code-key">"name"</span>: <span class="code-str">"<span th:text="${name}">Tran Le Anh Quan</span>"</span>,</span>
+<span class="code-indent"><span class="code-key">"role"</span>: <span class="code-str">"<span th:text="${title}">Java Backend Developer</span>"</span>,</span>
+<span class="code-indent"><span class="code-key">"coreTech"</span>: <span class="code-bracket">[</span><span class="code-str">"Java"</span>, <span class="code-str">"Spring Boot"</span>, <span class="code-str">"PostgreSQL"</span>, <span class="code-str">"Spring Security"</span><span class="code-bracket">]</span>,</span>
+<span class="code-indent"><span class="code-key">"status"</span>: <span class="code-str">"Ready for Opportunities"</span>,</span>
+<span class="code-indent"><span class="code-key">"openToWork"</span>: <span class="code-bool">true</span></span>
+<span class="code-bracket">}</span></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================================
+     ABOUT & HIGHLIGHTS
+     ========================================================================== -->
+<main>
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">About Me</span>
+                <h2 class="section-title">Engineering Reliable Backend Foundations</h2>
+                <p class="section-subtitle">Dedicated to creating scalable, testable, and high-performance server-side solutions.</p>
+            </div>
+
+            <div class="about-grid">
+                <!-- Main Bio Card -->
+                <div class="about-main-card">
+                    <p class="about-lead" th:text="${about}">
+                        I am a developer passionate about Java and Spring Boot ecosystem, focusing on architectural integrity, clean database schemas, and dependable APIs.
+                    </p>
+                    <div class="about-details">
+                        <p>
+                            My focus centers on the back-end engineering workflow: translating business logic into well-structured entity models, securing endpoints with token-based authentication (JWT / Spring Security), and optimizing relational queries.
+                        </p>
+                        <p>
+                            I value clean architecture, maintainable abstractions, and collaboration in cross-functional teams to build products that solve real-world problems.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bento Features -->
+                <div class="bento-features">
+                    <div class="bento-card">
+                        <div class="bento-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="bento-title">High-Efficiency REST APIs</h3>
+                        <p class="bento-text">Designed with intuitive endpoint hierarchies, clean validation layers, and standardized JSON responses.</p>
+                    </div>
+
+                    <div class="bento-card">
+                        <div class="bento-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h3 class="bento-title">Robust Security &amp; Auth</h3>
+                        <p class="bento-text">Implemented stateless JWT token authentication, role-based access control, and protected routes via Spring Security.</p>
+                    </div>
+
+                    <div class="bento-card">
+                        <div class="bento-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
+                            </svg>
+                        </div>
+                        <h3 class="bento-title">Relational Data Modeling</h3>
+                        <p class="bento-text">Database schema design, foreign key relationships, transactions, and ORM mapping with JPA / Hibernate.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack Pills -->
+            <div class="skills-container" id="skills">
+                <span class="section-tag">Core Technologies</span>
+                <ul class="skills-list">
+                    <li class="skill-pill" th:each="s : ${skills}">
+                        <span class="skill-indicator"></span>
+                        <span th:text="${s}">Java</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         PROJECTS SECTION
+         ========================================================================== -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Featured Work</span>
+                <h2 class="section-title">Projects &amp; Contributions</h2>
+                <p class="section-subtitle">Real-world systems, team repositories, and backend applications I have developed.</p>
+            </div>
+
+            <div class="projects-grid">
+                <article class="project-card" th:each="p : ${projects}">
+                    <div>
+                        <div class="project-top">
+                            <svg class="folder-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                            </svg>
+
+                            <a th:href="${p.link()}" target="_blank" rel="noopener noreferrer" class="project-link-btn" title="View Source on GitHub" aria-label="View Source on GitHub">
+                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        </div>
+
+                        <h3 class="project-title" th:text="${p.name()}">Project Title</h3>
+                        <p class="project-desc" th:text="${p.description()}">Detailed project description goes here...</p>
+                    </div>
+
+                    <ul class="project-skills">
+                        <li class="project-skill-tag" th:each="s : ${p.skills()}" th:text="${s}">Spring Boot</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         CONTACT SECTION
+         ========================================================================== -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Get In Touch</span>
+                <h2 class="section-title">Let's Connect &amp; Collaborate</h2>
+                <p class="section-subtitle">Have a project, job opportunity, or just want to discuss backend technology? Drop a message!</p>
+            </div>
+
+            <div class="contact-grid">
+                <!-- Contact Direct Info -->
+                <div class="contact-info">
+                    <p class="contact-info-desc">
+                        I am currently interested in backend development roles, internships, and collaborative software engineering projects. Feel free to contact me directly via email or send a message using the form.
+                    </p>
+
+                    <div class="contact-methods">
+                        <!-- Email Card -->
+                        <a th:if="${email}" th:href="'mailto:' + ${email}" class="contact-card-link">
+                            <div class="contact-card-icon">
+                                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="contact-card-title">Email Directly</div>
+                                <div class="contact-card-val" th:text="${email}">you@example.com</div>
+                            </div>
+                        </a>
+
+                        <!-- GitHub Card -->
+                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="contact-card-link">
+                            <div class="contact-card-icon">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="contact-card-title">GitHub</div>
+                                <div class="contact-card-val">Explore Source Repositories</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Form Card -->
+                <div class="contact-form-container">
+                    <!-- Success Notification Banner -->
+                    <div class="success-banner" th:if="${success}" role="status">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Message received! Thank you, I will get back to you shortly.</span>
+                    </div>
+
+                    <form class="contact-form" th:action="@{/contact}" th:object="${contactForm}" method="post">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Your Email Address</label>
+                            <input class="form-control" type="email" id="email" th:field="*{email}" placeholder="you@company.com" required>
+                            <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                Invalid email address
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message</label>
+                            <textarea class="form-control" id="message" th:field="*{message}" rows="5" placeholder="Hi Quan, I'd like to talk about an opportunity..." required></textarea>
+                            <p class="error-message" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">
+                                Message cannot be blank
+                            </p>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 8px;">
+                            <span>Send Message</span>
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ==========================================================================
+     FOOTER
+     ========================================================================== -->
+<footer class="site-footer">
+    <div class="container footer-container">
+        <p>© <span th:text="${name}">Tran Le Anh Quan</span>. All rights reserved.</p>
+        <div class="footer-tech">
+            <span>Powered by</span>
+            <span class="gradient-text" style="font-weight: 700;">Spring Boot &amp; Thymeleaf</span>
+        </div>
+        <a class="footer-back-to-top" href="#top">
+            <span>Back to top</span>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        </a>
+    </div>
+</footer>
+
+<!-- Toast message for copy action -->
+<div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">✓ JSON copied to clipboard!</div>
+
+<!-- Scripts -->
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
