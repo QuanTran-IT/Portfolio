@@ -48,8 +48,8 @@
     --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.2);
 
     /* Typography */
-    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+    --font-sans: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
 
     /* Radius & Spacing */
     --radius-sm: 8px;
@@ -400,6 +400,52 @@ a:hover {
     align-items: center;
 }
 
+.hero-heading-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 6px 0 24px;
+}
+
+.hero-identity {
+    min-width: 0;
+}
+
+.hero-greeting {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.hero-heading-row .hero-name {
+    display: block;
+    margin: 0;
+    font-size: clamp(2.35rem, 3.2vw, 3.1rem);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    overflow-wrap: normal;
+}
+
+.profile-photo-slot {
+    width: 124px;
+    height: 124px;
+    flex: 0 0 124px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 4px solid var(--primary);
+    border-radius: 50%;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-glow);
+}
+
+.profile-photo-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* Status Badge */
 .status-badge {
     display: inline-flex;
@@ -450,17 +496,15 @@ a:hover {
 }
 
 .hero-title {
-    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
     color: var(--primary);
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.hero-title-separator {
-    color: var(--text-muted);
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 2px;
 }
 
 .hero-desc {
@@ -613,11 +657,12 @@ a:hover {
 }
 
 .terminal-code {
-    padding: 20px;
+    padding: 18px 20px;
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.75;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
     color: #cbd5e1;
     overflow-x: auto;
 }
@@ -627,6 +672,7 @@ a:hover {
 .code-str { color: var(--terminal-string); }
 .code-bool { color: var(--terminal-bool); }
 .code-indent { padding-left: 20px; display: block; }
+.code-nested { padding-left: 40px; }
 
 /* ==========================================================================
    SECTIONS GENERAL
@@ -747,6 +793,84 @@ a:hover {
     color: var(--text-secondary);
     line-height: 1.6;
 }
+
+/* Experience, education, and certificates */
+.experience-grid,
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.experience-card,
+.education-card {
+    padding: 28px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.experience-card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.experience-meta,
+.experience-date,
+.education-date {
+    color: var(--primary);
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.experience-card h3,
+.education-card h3 {
+    margin-top: 5px;
+    font-size: 1.25rem;
+}
+
+.experience-card > p,
+.education-card > p {
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-top: 10px;
+}
+
+.experience-project {
+    display: grid;
+    gap: 4px;
+    margin-top: 18px;
+    padding: 15px 16px;
+    border-left: 3px solid var(--primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: var(--bg-surface-elevated);
+}
+
+.experience-project strong { color: var(--text-primary); }
+.experience-project span { color: var(--text-secondary); font-size: .9rem; line-height: 1.5; }
+
+.experience-points {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0 0 18px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+.certificate-list {
+    display: grid;
+    gap: 14px;
+    list-style: none;
+    margin-top: 16px;
+}
+
+.certificate-list li { display: grid; gap: 3px; }
+.certificate-list strong { color: var(--text-primary); font-size: .95rem; }
+.certificate-list span { color: var(--text-secondary); font-size: .88rem; }
 
 /* ==========================================================================
    SKILLS & TECH STACK
@@ -976,6 +1100,12 @@ a:hover {
     color: var(--text-primary);
 }
 
+.linkedin-mark {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -.08em;
+}
+
 /* Form */
 .contact-form-container {
     background: var(--bg-surface);
@@ -1135,6 +1265,11 @@ textarea.form-control {
         grid-template-columns: 1fr;
     }
 
+    .experience-grid,
+    .education-grid {
+        grid-template-columns: 1fr;
+    }
+
     .contact-grid {
         grid-template-columns: 1fr;
         gap: 36px;
@@ -1171,6 +1306,20 @@ textarea.form-control {
 
     .hero-section {
         padding: 48px 0 60px;
+    }
+
+    .hero-heading-row {
+        gap: 16px;
+    }
+
+    .profile-photo-slot {
+        width: 92px;
+        height: 92px;
+        flex-basis: 92px;
+    }
+
+    .hero-heading-row .hero-name {
+        font-size: clamp(2rem, 7vw, 2.8rem);
     }
 
     .projects-grid {
