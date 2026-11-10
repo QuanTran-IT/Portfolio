@@ -2,51 +2,73 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Tran Le Anh Quan, Software Engineering student at FPT University and Java Backend Developer focused on Spring Boot, REST APIs, and database design.">
-    <title th:text="${name} + ' | ' + ${title}">Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" th:content="${name} + ' - ' + ${title} + ' | Portfolio, Projects, Skills & Experience'">
+    <title th:text="${name} + ' | ' + ${title}">Tran Le Anh Quan | Java Backend Developer</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
-    <!-- Favicon (Code SVG) -->
+    <!-- Favicon (Code Bracket SVG) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'><path d='M8.59 16.59L4 12l4.59-4.59L10 8.82 6.83 12 10 15.18l-1.41 1.41zm6.82 0L20 12l-4.59-4.59L14 8.82 17.17 12 14 15.18l1.41 1.41z'/></svg>">
 </head>
-<body>
+<body id="top">
 
-<!-- Ambient Glow Background Spots -->
+<!-- Reading Progress Bar -->
+<div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+
+<!-- Background Interactive Canvas & Ambient Glows -->
+<canvas id="bgCanvas" class="bg-canvas" aria-hidden="true"></canvas>
+<div class="bg-grid-overlay" aria-hidden="true"></div>
 <div class="ambient-glow ambient-glow-1" aria-hidden="true"></div>
 <div class="ambient-glow ambient-glow-2" aria-hidden="true"></div>
+<div class="ambient-glow ambient-glow-3" aria-hidden="true"></div>
 
 <!-- ==========================================================================
      NAVIGATION
      ========================================================================== -->
-<header class="site-nav">
+<header class="site-nav" id="siteNav">
     <div class="container nav-container">
         <a class="nav-brand" href="#top" aria-label="Home">
-            <span class="nav-brand-avatar">&lt;/&gt;</span>
-            <span th:text="${name}">Portfolio</span>
+            <span class="nav-brand-avatar">
+                <span class="avatar-bracket">&lt;</span>
+                <span class="avatar-core">Q</span>
+                <span class="avatar-bracket">/&gt;</span>
+            </span>
+            <span class="brand-text">
+                <span class="brand-name" th:text="${name}">Tran Le Anh Quan</span>
+                <span class="brand-sub">Portfolio</span>
+            </span>
         </a>
 
-        <nav>
+        <nav class="nav-wrapper">
             <ul class="nav-menu" id="navMenu">
                 <li><a class="nav-link" href="#about">About</a></li>
+                <li><a class="nav-link" href="#strengths">Strengths</a></li>
                 <li><a class="nav-link" href="#skills">Tech Stack</a></li>
+                <li><a class="nav-link" href="#projects">Projects</a></li>
                 <li><a class="nav-link" href="#experience">Experience</a></li>
                 <li><a class="nav-link" href="#education">Education</a></li>
-                <li><a class="nav-link" href="#projects">Projects</a></li>
                 <li><a class="nav-link" href="#contact">Contact</a></li>
             </ul>
         </nav>
 
         <div class="nav-actions">
-            <!-- Theme Switcher Toggle (Dark / Light) -->
-            <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">
+            <!-- CV Preview Modal Trigger -->
+            <button class="btn btn-sm btn-ghost nav-cv-btn" id="openCvBtn" type="button" title="View Quick CV">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>CV / Resume</span>
+            </button>
+
+            <!-- Theme Switcher Button -->
+            <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme" title="Toggle theme">
                 <!-- Sun Icon for Light Mode -->
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="5"></circle>
@@ -65,21 +87,19 @@
                 </svg>
             </button>
 
-            <!-- GitHub Link if available -->
-            <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="GitHub Profile">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <!-- GitHub Profile Link -->
+            <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-secondary nav-github-btn" aria-label="GitHub Profile">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
                 </svg>
                 <span>GitHub</span>
             </a>
 
-            <!-- Mobile Hamburger Button -->
+            <!-- Mobile Hamburger Toggle -->
             <button class="mobile-toggle" id="mobileMenuToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
             </button>
         </div>
     </div>
@@ -88,60 +108,132 @@
 <!-- ==========================================================================
      HERO SECTION
      ========================================================================== -->
-<section class="hero-section" id="top">
+<section class="hero-section" id="hero">
     <div class="container hero-grid">
         <div class="hero-content">
             <!-- Availability Badge -->
             <div class="status-badge">
-                <span class="pulse-dot"></span>
-                <span>Available for new opportunities</span>
+                <span class="pulse-beacon">
+                    <span class="pulse-ring"></span>
+                    <span class="pulse-core"></span>
+                </span>
+                <span>Open for Opportunities &bull; Internships &bull; Collaborations</span>
             </div>
 
+            <!-- Profile and Greeting Header -->
             <div class="hero-heading-row">
-                <div class="profile-photo-slot">
-                    <!-- Place the profile photo at src/main/resources/static/images/profile.jpg. -->
-                    <img src="/images/profile.jpg" alt="Profile photo of Tran Le Anh Quan">
+                <div class="profile-avatar-wrapper">
+                    <div class="avatar-glow-ring"></div>
+                    <div class="profile-photo-slot">
+                        <img th:src="@{/images/profile.jpg}" src="/images/profile.jpg" alt="Profile photo of Tran Le Anh Quan">
+                    </div>
+                    <!-- Micro tech badges floating around avatar -->
+                    <span class="floating-pill pill-java" title="Java 21">☕ Java</span>
+                    <span class="floating-pill pill-spring" title="Spring Boot">🍃 Spring</span>
+                    <span class="floating-pill pill-db" title="PostgreSQL / SQL">🐘 SQL</span>
                 </div>
+
                 <div class="hero-identity">
-                    <p class="hero-greeting">Hi, I'm</p>
-                    <h1 class="hero-name gradient-text" th:text="${name}">Your Name</h1>
+                    <p class="hero-greeting">
+                        <span class="greeting-wave">👋</span> Hello world, I'm
+                    </p>
+                    <h1 class="hero-name">
+                        <span class="gradient-text" th:text="${name}">Tran Le Anh Quan</span>
+                    </h1>
                 </div>
             </div>
 
-            <div class="hero-title">
-                <span th:text="${title}">Java Backend Developer</span>
+            <!-- Animated Dynamic Title -->
+            <div class="hero-title-box">
+                <span class="hero-title-prefix">&gt; </span>
+                <span class="hero-title-dynamic" id="typewriterText" th:text="${title}">Java Backend Developer</span>
+                <span class="typewriter-cursor" aria-hidden="true">_</span>
             </div>
 
             <p class="hero-desc">
-                Software Engineering student at FPT University focused on Java backend development, API design, and relational databases.
+                Software Engineering student at <strong>FPT University</strong>. Passionate about building robust <strong>Java backend systems</strong>, architecting <strong>RESTful APIs</strong>, and designing high-performance <strong>relational databases</strong> with PostgreSQL and SQL Server.
             </p>
 
+            <!-- Call to Actions -->
             <div class="hero-cta">
                 <a class="btn btn-primary" href="#projects">
-                    <span>Explore Projects</span>
+                    <span>Explore Featured Projects</span>
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </a>
                 <a class="btn btn-secondary" href="#contact">
-                    <span>Get in Touch</span>
+                    <span>Let's Talk</span>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                 </a>
+                <button class="btn btn-ghost" id="heroCvBtn" type="button">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>View Resume</span>
+                </button>
             </div>
 
+            <!-- Key Quick Stats -->
+            <div class="hero-highlights">
+                <div class="highlight-item">
+                    <div class="highlight-top">
+                        <span class="highlight-number">8.29</span>
+                        <span class="highlight-unit">/10</span>
+                    </div>
+                    <span class="highlight-label">GPA @ FPT University</span>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-top">
+                        <span class="highlight-number">10+</span>
+                    </div>
+                    <span class="highlight-label">Core Tech Skills</span>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-top">
+                        <span class="highlight-number">2+</span>
+                    </div>
+                    <span class="highlight-label">Shipped Projects</span>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-top">
+                        <span class="highlight-number">4</span>
+                    </div>
+                    <span class="highlight-label">Certificates Earned</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Terminal / API Response Mock Card -->
+        <!-- Interactive Developer Terminal Mock -->
         <div class="hero-terminal">
-            <div class="terminal-card">
+            <div class="terminal-card spotlight-card">
                 <div class="terminal-bar">
                     <div class="terminal-dots">
                         <span class="terminal-dot dot-red"></span>
                         <span class="terminal-dot dot-yellow"></span>
                         <span class="terminal-dot dot-green"></span>
                     </div>
-                    <span class="terminal-title">developer-stack.json</span>
-                    <button class="copy-json-btn" id="copyJsonBtn" type="button" title="Copy JSON payload">
+
+                    <!-- Terminal Tabs -->
+                    <div class="terminal-tabs" role="tablist">
+                        <button class="terminal-tab active" id="tabJson" type="button" data-tab="json" role="tab" aria-selected="true">
+                            <span class="tab-icon">{}</span>
+                            <span>profile.json</span>
+                        </button>
+                        <button class="terminal-tab" id="tabJava" type="button" data-tab="java" role="tab" aria-selected="false">
+                            <span class="tab-icon">☕</span>
+                            <span>Developer.java</span>
+                        </button>
+                        <button class="terminal-tab" id="tabStatus" type="button" data-tab="status" role="tab" aria-selected="false">
+                            <span class="tab-icon">&gt;_</span>
+                            <span>health.sh</span>
+                        </button>
+                    </div>
+
+                    <button class="copy-json-btn" id="copyCodeBtn" type="button" title="Copy code snippet">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -150,18 +242,70 @@
                     </button>
                 </div>
 
-                <div class="terminal-request">
+                <div class="terminal-request-bar">
                     <div class="req-left">
-                        <span class="http-method">STACK</span>
-                        <span class="http-endpoint">Technologies</span>
+                        <span class="http-badge get">GET</span>
+                        <span class="http-endpoint">/api/v1/engineer/quan-profile</span>
                     </div>
                     <div class="http-status">
-                        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
-                        <span>CORE SKILLS</span>
+                        <span class="status-indicator"></span>
+                        <span>200 OK (18ms)</span>
                     </div>
                 </div>
 
-                <pre class="terminal-code" id="jsonOutput"><span class="code-bracket">{</span><span class="code-indent"><span class="code-key">"languages"</span>: <span class="code-bracket">[</span><span class="code-str">"Core Java"</span>, <span class="code-str">"C"</span><span class="code-bracket">]</span>,</span><span class="code-indent"><span class="code-key">"backend"</span>: <span class="code-bracket">[</span><span class="code-str">"Spring Boot"</span>, <span class="code-str">"REST APIs"</span>, <span class="code-str">"MVC"</span><span class="code-bracket">]</span>,</span><span class="code-indent"><span class="code-key">"data"</span>: <span class="code-bracket">[</span><span class="code-str">"PostgreSQL"</span>, <span class="code-str">"Microsoft SQL Server"</span><span class="code-bracket">]</span>,</span><span class="code-indent"><span class="code-key">"tools"</span>: <span class="code-bracket">[</span><span class="code-str">"Git"</span>, <span class="code-str">"GitHub"</span><span class="code-bracket">]</span></span><span class="code-bracket">}</span></pre>
+                <!-- Tab 1: JSON Output -->
+                <div class="tab-content active" id="contentJson">
+                    <pre class="terminal-code" id="jsonOutput"><span class="code-bracket">{</span>
+  <span class="code-key">"name"</span>: <span class="code-str">"Tran Le Anh Quan"</span>,
+  <span class="code-key">"role"</span>: <span class="code-str">"Java Backend Developer"</span>,
+  <span class="code-key">"education"</span>: <span class="code-str">"FPT University (GPA 8.29)"</span>,
+  <span class="code-key">"languages"</span>: <span class="code-bracket">[</span><span class="code-str">"Java 21"</span>, <span class="code-str">"C"</span>, <span class="code-str">"SQL"</span><span class="code-bracket">]</span>,
+  <span class="code-key">"frameworks"</span>: <span class="code-bracket">[</span><span class="code-str">"Spring Boot 3"</span>, <span class="code-str">"Spring MVC"</span>, <span class="code-str">"Hibernate / JPA"</span><span class="code-bracket">]</span>,
+  <span class="code-key">"databases"</span>: <span class="code-bracket">[</span><span class="code-str">"PostgreSQL"</span>, <span class="code-str">"SQL Server"</span><span class="code-bracket">]</span>,
+  <span class="code-key">"activeClubs"</span>: <span class="code-bracket">[</span><span class="code-str">"F Code"</span>, <span class="code-str">"9.5AI"</span><span class="code-bracket">]</span>,
+  <span class="code-key">"openForWork"</span>: <span class="code-bool">true</span>
+<span class="code-bracket">}</span></pre>
+                </div>
+
+                <!-- Tab 2: Java Spring Code -->
+                <div class="tab-content" id="contentJava" style="display:none;">
+                    <pre class="terminal-code"><span class="code-comment">// Spring Boot REST Controller snippet</span>
+<span class="code-key">@RestController</span>
+<span class="code-key">@RequestMapping</span>(<span class="code-str">"/api/v1/developer"</span>)
+<span class="code-key">public class</span> <span class="code-class">ProfileController</span> {
+
+    <span class="code-key">@GetMapping</span>(<span class="code-str">"/status"</span>)
+    <span class="code-key">public</span> ResponseEntity&lt;Map&lt;String, Object&gt;&gt; getStatus() {
+        <span class="code-key">return</span> ResponseEntity.ok(Map.of(
+            <span class="code-str">"developer"</span>, <span class="code-str">"Tran Le Anh Quan"</span>,
+            <span class="code-str">"coreSkill"</span>, <span class="code-str">"Spring Boot &amp; REST APIs"</span>,
+            <span class="code-str">"database"</span>,  <span class="code-str">"PostgreSQL &amp; MS SQL Server"</span>,
+            <span class="code-str">"readiness"</span>, <span class="code-str">"Ready for new challenges!"</span>
+        ));
+    }
+}</pre>
+                </div>
+
+                <!-- Tab 3: Shell Health Check -->
+                <div class="tab-content" id="contentStatus" style="display:none;">
+                    <pre class="terminal-code"><span class="code-prompt">$</span> curl -s https://quan-portfolio.dev/api/health
+<span class="code-str">{</span>
+  <span class="code-key">"status"</span>: <span class="code-str">"UP"</span>,
+  <span class="code-key">"runtime"</span>: <span class="code-str">"Java 21 LTS + Spring Boot 3"</span>,
+  <span class="code-key">"dbConnection"</span>: <span class="code-str">"CONNECTED (PostgreSQL / MSSQL)"</span>,
+  <span class="code-key">"fptUniversity"</span>: <span class="code-str">"Software Engineering 2024-2028"</span>,
+  <span class="code-key">"activeProjects"</span>: <span class="code-number">2</span>,
+  <span class="code-key">"uptime"</span>: <span class="code-str">"99.99%"</span>
+<span class="code-str">}</span>
+<span class="code-prompt">$</span> echo <span class="code-str">"Looking forward to collaborating with your engineering team!"</span></pre>
+                </div>
+
+                <div class="terminal-footer">
+                    <span class="terminal-status-text">
+                        <span class="pulse-mini-dot"></span> System Status: Online &amp; Ready
+                    </span>
+                    <span class="terminal-lang">Java 21 &bull; Spring Boot 3.5</span>
+                </div>
             </div>
         </div>
     </div>
@@ -174,64 +318,383 @@
     <section class="section" id="about">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">About Me</span>
-                <h2 class="section-title">Software Engineering Student</h2>
-                <p class="section-subtitle">Backend development, database design, and full-stack foundations.</p>
+                <span class="section-tag">// 01. ABOUT ME</span>
+                <h2 class="section-title">Driven by Clean Architecture &amp; Curiosity</h2>
+                <p class="section-subtitle">Bridging backend logic, relational data integrity, and real-world software reliability.</p>
             </div>
 
             <div class="about-grid">
                 <!-- Main Bio Card -->
-                <div class="about-main-card">
+                <div class="about-main-card spotlight-card">
+                    <div class="about-card-badge">Engineering Journey</div>
                     <p class="about-lead" th:text="${about}">
                         I am a Software Engineering student at FPT University focused on Java backend development. I have hands-on experience with Spring Boot, REST APIs, and relational database design using PostgreSQL and Microsoft SQL Server. Through academic and personal projects, I have also worked with C, MVC architecture, data structures, algorithms, and frontend implementation. I am looking for opportunities to contribute to real-world software and grow as an engineer.
                     </p>
                     <div class="about-details">
-                        <p>
-                            I enjoy understanding how the database, API, and user interface fit together across an application.
-                        </p>
-                        <p>
-                            I value teamwork and keep developing my problem-solving and software engineering skills through hands-on work.
-                        </p>
+                        <div class="about-point">
+                            <span class="point-icon">⚡</span>
+                            <div>
+                                <strong>Systematic Thinker:</strong>
+                                <span>I thrive on understanding the full lifecycle: from schema ERDs to REST endpoints, middleware validation, and UI interaction.</span>
+                            </div>
+                        </div>
+                        <div class="about-point">
+                            <span class="point-icon">🤝</span>
+                            <div>
+                                <strong>Team Collaborator:</strong>
+                                <span>Active member at F Code and collaborator in 9.5AI Club, applying agile workflows and constructive code reviews.</span>
+                            </div>
+                        </div>
+                        <div class="about-point">
+                            <span class="point-icon">📚</span>
+                            <div>
+                                <strong>Continuous Learning:</strong>
+                                <span>Consistently building projects and earning industry credentials from IBM, DeepLearning.AI, University of Michigan &amp; Minnesota.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Bento Features -->
-                <div class="bento-features">
-                    <div class="bento-card">
-                        <div class="bento-icon">
+                <!-- Right Side Quick Highlights -->
+                <div class="about-side-cards">
+                    <div class="about-stat-card spotlight-card">
+                        <div class="stat-icon-wrap">
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>FPT University Software Engineering</h4>
+                            <p>Bachelor Degree Candidate (2024 - 2028)</p>
+                            <span class="card-highlight-badge">Cumulative GPA: 8.29 / 10</span>
+                        </div>
+                    </div>
+
+                    <div class="about-stat-card spotlight-card">
+                        <div class="stat-icon-wrap">
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Active Engineering Clubs</h4>
+                            <p>F Code (Development Club) &bull; 9.5AI Club (Collaborator)</p>
+                            <span class="card-highlight-badge">Collaborative C &amp; Java Development</span>
+                        </div>
+                    </div>
+
+                    <div class="about-stat-card spotlight-card">
+                        <div class="stat-icon-wrap">
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Professional Focus</h4>
+                            <p>Java Backend &bull; REST APIs &bull; Relational Databases</p>
+                            <span class="card-highlight-badge">Spring Boot 3 Ecosystem</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         ENGINEERING STRENGTHS / BENTO SECTION
+         ========================================================================== -->
+    <section class="section" id="strengths">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// 02. CORE STRENGTHS</span>
+                <h2 class="section-title">What I Bring to an Engineering Team</h2>
+                <p class="section-subtitle">Disciplined coding practices, solid fundamentals, and end-to-end backend thinking.</p>
+            </div>
+
+            <div class="strengths-bento-grid">
+                <!-- Bento 1: Backend Architecture -->
+                <div class="bento-card spotlight-card bento-hero">
+                    <div class="bento-card-header">
+                        <div class="bento-icon icon-cyan">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <span class="bento-badge">Backend Core</span>
+                    </div>
+                    <h3 class="bento-title">Java &amp; Spring Boot Architecture</h3>
+                    <p class="bento-text">
+                        Designing modular layered architecture (Controller, Service, Repository, DTO). Building stateless RESTful APIs with validation, structured error handling, and clean JSON serialization.
+                    </p>
+                    <div class="bento-tags">
+                        <span>Spring Boot 3</span>
+                        <span>REST APIs</span>
+                        <span>Spring MVC</span>
+                        <span>DTO Pattern</span>
+                    </div>
+                </div>
+
+                <!-- Bento 2: Relational Databases -->
+                <div class="bento-card spotlight-card">
+                    <div class="bento-card-header">
+                        <div class="bento-icon icon-emerald">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3M4 12c0-2 1.5-3 3.5-3h9c2 0 3.5 1 3.5 3" />
+                            </svg>
+                        </div>
+                        <span class="bento-badge">Data Layer</span>
+                    </div>
+                    <h3 class="bento-title">Relational Database Design</h3>
+                    <p class="bento-text">
+                        Hands-on schema modeling with PostgreSQL and Microsoft SQL Server. Translating business requirements into normalized schemas (3NF) with foreign key constraints, indexes, and JPA mappings.
+                    </p>
+                    <div class="bento-tags">
+                        <span>PostgreSQL</span>
+                        <span>SQL Server</span>
+                        <span>Hibernate / JPA</span>
+                    </div>
+                </div>
+
+                <!-- Bento 3: Low-Level & Algorithmic Foundations -->
+                <div class="bento-card spotlight-card">
+                    <div class="bento-card-header">
+                        <div class="bento-icon icon-indigo">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </div>
+                        <span class="bento-badge">Fundamentals</span>
+                    </div>
+                    <h3 class="bento-title">C &amp; Data Structures</h3>
+                    <p class="bento-text">
+                        Strong computer science foundation built through programming in C, pointers, memory management, sorting algorithms, searching, and object-oriented design principles.
+                    </p>
+                    <div class="bento-tags">
+                        <span>C Language</span>
+                        <span>DSA</span>
+                        <span>OOP Principles</span>
+                    </div>
+                </div>
+
+                <!-- Bento 4: Team Collaboration & Agile -->
+                <div class="bento-card spotlight-card bento-wide">
+                    <div class="bento-card-header">
+                        <div class="bento-icon icon-purple">
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h3 class="bento-title">Backend Development</h3>
-                        <p class="bento-text">Java, Spring Boot, REST APIs, and MVC architecture.</p>
+                        <span class="bento-badge">Engineering Culture</span>
                     </div>
-
-                    <div class="bento-card">
-                        <div class="bento-icon">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <h3 class="bento-title">Database Design</h3>
-                        <p class="bento-text">Relational modeling with PostgreSQL and Microsoft SQL Server.</p>
-                    </div>
-
-                    <div class="bento-card">
-                        <div class="bento-icon">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
-                            </svg>
-                        </div>
-                        <h3 class="bento-title">Full-Stack Foundations</h3>
-                        <p class="bento-text">Frontend implementation and integration across application layers.</p>
+                    <h3 class="bento-title">Agile Teamwork &amp; Source Control</h3>
+                    <p class="bento-text">
+                        Experienced in collaborating via Git branching, pull requests, and peer reviews in university team projects and club initiatives. Comfortable working with cross-functional members to deliver end-to-end features.
+                    </p>
+                    <div class="bento-tags">
+                        <span>Git &amp; GitHub</span>
+                        <span>Code Reviews</span>
+                        <span>Full-Stack Integration</span>
+                        <span>Team Projects</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Tech Stack Pills -->
-            <div class="skills-container" id="skills">
-                <span class="section-tag">Core Technologies</span>
+    <!-- ==========================================================================
+         TECH STACK SECTION
+         ========================================================================== -->
+    <section class="section" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// 03. TECH STACK &amp; TOOLING</span>
+                <h2 class="section-title">Technologies in My Toolkit</h2>
+                <p class="section-subtitle">Categorized view of languages, frameworks, databases, and development tooling.</p>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="skill-filter-bar">
+                <button class="skill-filter-btn active" type="button" data-skill-filter="all">All Skills</button>
+                <button class="skill-filter-btn" type="button" data-skill-filter="backend">Backend &amp; APIs</button>
+                <button class="skill-filter-btn" type="button" data-skill-filter="database">Databases</button>
+                <button class="skill-filter-btn" type="button" data-skill-filter="core">Languages &amp; Core</button>
+                <button class="skill-filter-btn" type="button" data-skill-filter="tools">DevOps &amp; Tools</button>
+            </div>
+
+            <!-- Rich Tech Stack Grid with Real SVG Icons -->
+            <div class="tech-card-grid">
+                <!-- Java -->
+                <div class="tech-item-card spotlight-card" data-category="backend core">
+                    <div class="tech-item-icon icon-java">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.85 16.84c0 .08.06.14.15.19 1.15.65 3.3.69 4.67.06.31-.14.65-.07.8.21.14.28.05.62-.23.77-1.8.84-4.57.81-6.07-.06-.5-.29-.75-.82-.61-1.33.14-.52.66-.84 1.18-.7.04.01.07.03.11.04v.82zm.76-2.61c0 .09.05.15.15.2 1.34.72 4.14.73 5.75-.08.3-.15.65-.08.8.21.14.29.05.63-.23.78-2.14 1.09-5.46 1.05-7.23.09-.54-.3-.82-.87-.69-1.42.13-.55.67-.91 1.22-.79.08.02.16.05.23.1v.91zm3.62-5.41c.21.84-.2 1.68-.69 2.47-.44.7-.91 1.45-.91 2.37 0 .09.07.16.16.16.09 0 .15-.05.18-.12.51-.95 1.19-1.83 1.83-2.77.71-1.04 1.25-2.22 1-3.48-.12-.6-.4-1.18-.75-1.68-.14-.2-.41-.22-.57-.06-.15.14-.14.39 0 .58.26.39.46.84.55 1.31.09.47.01.94-.14 1.39-.23.51-.55.97-.86 1.43z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Core Java (Java 21)</div>
+                        <div class="tech-item-type">Primary Language</div>
+                    </div>
+                    <span class="tech-level-pill">Advanced</span>
+                </div>
+
+                <!-- Spring Boot -->
+                <div class="tech-item-card spotlight-card" data-category="backend">
+                    <div class="tech-item-icon icon-spring">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21.16 8.35c-.48-2.61-2.15-4.83-4.59-6.09C13.29.58 9.77.94 6.89 2.94 4.02 4.93 2.5 8.1 2.98 11.5c.42 2.95 2.1 5.48 4.71 6.85 2.61 1.37 5.75 1.41 8.39.09l-1.45-2.51c-1.82.91-3.99.88-5.79-.06-1.81-.95-2.97-2.7-3.26-4.75-.33-2.35.72-4.54 2.71-5.92 1.99-1.38 4.43-1.63 6.64-.7 1.69.71 2.85 2.25 3.18 4.06l2.8-.21z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Spring Boot 3</div>
+                        <div class="tech-item-type">Backend Framework</div>
+                    </div>
+                    <span class="tech-level-pill">Primary</span>
+                </div>
+
+                <!-- RESTful APIs -->
+                <div class="tech-item-card spotlight-card" data-category="backend">
+                    <div class="tech-item-icon icon-api">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">RESTful APIs</div>
+                        <div class="tech-item-type">API Architecture &amp; Design</div>
+                    </div>
+                    <span class="tech-level-pill">Core</span>
+                </div>
+
+                <!-- PostgreSQL -->
+                <div class="tech-item-card spotlight-card" data-category="database">
+                    <div class="tech-item-icon icon-postgres">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">PostgreSQL</div>
+                        <div class="tech-item-type">RDBMS</div>
+                    </div>
+                    <span class="tech-level-pill">Proficient</span>
+                </div>
+
+                <!-- Microsoft SQL Server -->
+                <div class="tech-item-card spotlight-card" data-category="database">
+                    <div class="tech-item-icon icon-mssql">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-1.34-6-3v-2c0 1.66 2.69 3 6 3s6-1.34 6-3v2c0 1.66-2.69 3-6 3zm0-5c-3.31 0-6-1.34-6-3V7c0 1.66 2.69 3 6 3s6-1.34 6-3v2c0 1.66-2.69 3-6 3z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Microsoft SQL Server</div>
+                        <div class="tech-item-type">Enterprise RDBMS</div>
+                    </div>
+                    <span class="tech-level-pill">Proficient</span>
+                </div>
+
+                <!-- Database Design & Modeling -->
+                <div class="tech-item-card spotlight-card" data-category="database">
+                    <div class="tech-item-icon icon-dbdesign">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Database Design</div>
+                        <div class="tech-item-type">Schema &amp; Normalization</div>
+                    </div>
+                    <span class="tech-level-pill">Core</span>
+                </div>
+
+                <!-- C Language -->
+                <div class="tech-item-card spotlight-card" data-category="core">
+                    <div class="tech-item-icon icon-c">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.84 14.19c-1.12.72-2.48 1.1-3.84 1.1-3.47 0-6.29-2.82-6.29-6.29s2.82-6.29 6.29-6.29c1.36 0 2.72.38 3.84 1.1l-1.42 2.38c-.7-.45-1.52-.69-2.42-.69-2.15 0-3.9 1.75-3.9 3.9s1.75 3.9 3.9 3.9c.9 0 1.72-.24 2.42-.69l1.42 2.38z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">C Language</div>
+                        <div class="tech-item-type">System Fundamentals</div>
+                    </div>
+                    <span class="tech-level-pill">Solid</span>
+                </div>
+
+                <!-- Data Structures & Algorithms -->
+                <div class="tech-item-card spotlight-card" data-category="core">
+                    <div class="tech-item-icon icon-dsa">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Data Structures &amp; Algorithms</div>
+                        <div class="tech-item-type">Problem Solving &amp; Logic</div>
+                    </div>
+                    <span class="tech-level-pill">Essential</span>
+                </div>
+
+                <!-- Git & GitHub -->
+                <div class="tech-item-card spotlight-card" data-category="tools">
+                    <div class="tech-item-icon icon-git">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21.62 10.45L13.55 2.38a1.66 1.66 0 00-2.35 0L9.04 4.54l3.02 3.02c.7-.24 1.52-.08 2.08.48.56.56.72 1.38.48 2.08l2.91 2.91c.7-.24 1.52-.08 2.08.48.78.78.78 2.05 0 2.83a2 2 0 01-2.83 0 2.008 2.008 0 01-.46-2.19l-2.73-2.73v5.47a2 2 0 011.02 1.74 2 2 0 01-4 0c0-.75.42-1.42 1.05-1.76v-5.6c-.63-.34-1.05-1.01-1.05-1.76 0-.39.12-.76.33-1.07L7.96 5.62 2.38 11.2a1.66 1.66 0 000 2.35l8.07 8.07c.65.65 1.7.65 2.35 0l8.82-8.82c.65-.65.65-1.7 0-2.35z"/>
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">Git &amp; GitHub</div>
+                        <div class="tech-item-type">Version Control &amp; Collab</div>
+                    </div>
+                    <span class="tech-level-pill">Daily Use</span>
+                </div>
+
+                <!-- MVC Architecture -->
+                <div class="tech-item-card spotlight-card" data-category="backend">
+                    <div class="tech-item-icon icon-mvc">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">MVC Architecture</div>
+                        <div class="tech-item-type">Design Pattern</div>
+                    </div>
+                    <span class="tech-level-pill">Proficient</span>
+                </div>
+
+                <!-- OOP -->
+                <div class="tech-item-card spotlight-card" data-category="core">
+                    <div class="tech-item-icon icon-oop">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">OOP (Object-Oriented)</div>
+                        <div class="tech-item-type">Core Paradigm</div>
+                    </div>
+                    <span class="tech-level-pill">Solid</span>
+                </div>
+
+                <!-- Frontend Integration -->
+                <div class="tech-item-card spotlight-card" data-category="tools">
+                    <div class="tech-item-icon icon-web">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="tech-item-body">
+                        <div class="tech-item-title">HTML5, CSS3, JS, Thymeleaf</div>
+                        <div class="tech-item-type">Frontend Integration</div>
+                    </div>
+                    <span class="tech-level-pill">Functional</span>
+                </div>
+            </div>
+
+            <!-- Fallback Dynamic Skill Pills for DB-seeded skills -->
+            <div class="skills-all-pills" th:if="${skills != null and !skills.isEmpty()}">
+                <span class="skills-all-title">Database Synced Skill Tags:</span>
                 <ul class="skills-list">
                     <li class="skill-pill" th:each="s : ${skills}">
                         <span class="skill-indicator"></span>
@@ -243,118 +706,337 @@
     </section>
 
     <!-- ==========================================================================
-         EXPERIENCE SECTION
+         FEATURED PROJECTS SECTION
          ========================================================================== -->
-    <section class="section" id="experience">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Experience</span>
-                <h2 class="section-title">Learning by Building</h2>
-                <p class="section-subtitle">Team projects and campus activities that have shaped my software engineering skills.</p>
-            </div>
-
-            <div class="experience-grid">
-                <article class="experience-card">
-                    <div class="experience-card-heading">
-                        <div>
-                            <span class="experience-meta">F Code | FPT University</span>
-                            <h3>Member</h3>
-                        </div>
-                        <span class="experience-date">Jul 2026 - Present</span>
-                    </div>
-                    <p>Participate in programming and software development activities with the F Code community.</p>
-                    <div class="experience-project">
-                        <strong>Event Contributing Management System</strong>
-                        <span>Collaborated on a C project to manage event participation.</span>
-                    </div>
-                    <ul class="experience-points">
-                        <li>Built event search and filtering features.</li>
-                        <li>Added tracking for members' completed event history.</li>
-                        <li>Applied data structures, algorithms, and teamwork.</li>
-                    </ul>
-                </article>
-
-                <article class="experience-card">
-                    <div class="experience-card-heading">
-                        <div>
-                            <span class="experience-meta">9.5AI Club</span>
-                            <h3>Collaborator</h3>
-                        </div>
-                        <span class="experience-date">Academic club</span>
-                    </div>
-                    <p>Academic Club Member and collaborator in 9.5AI Club activities.</p>
-                    <div class="experience-project">
-                        <strong>Community involvement</strong>
-                        <span>Building communication, teamwork, and collaboration skills beyond coursework.</span>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="education">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Education &amp; Certifications</span>
-                <h2 class="section-title">Academic Foundations</h2>
-                <p class="section-subtitle">Formal study and certificates supporting my software engineering journey.</p>
-            </div>
-
-            <div class="education-grid">
-                <article class="education-card">
-                    <span class="experience-meta">FPT University</span>
-                    <h3>Computer Software Engineering</h3>
-                    <p class="education-date">Jul 2024 - May 2028</p>
-                    <p>Academic score: 8.29</p>
-                </article>
-
-                <article class="education-card">
-                    <span class="experience-meta">Certificates</span>
-                    <ul class="certificate-list">
-                        <li><strong>AI For Everyone</strong><span>DeepLearning.AI - May 2025</span></li>
-                        <li><strong>Web Design for Everybody: Basics of Web Development &amp; Coding</strong><span>University of Michigan</span></li>
-                        <li><strong>Generative AI Fundamentals</strong><span>IBM</span></li>
-                        <li><strong>Software Development Lifecycle</strong><span>University of Minnesota</span></li>
-                    </ul>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========================================================================== -->
-    <!-- PROJECTS SECTION -->
-    <!-- ========================================================================== -->
     <section class="section" id="projects">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Featured Work</span>
-                <h2 class="section-title">Projects &amp; Contributions</h2>
-                <p class="section-subtitle">Selected academic and team projects.</p>
+                <span class="section-tag">// 04. FEATURED WORK</span>
+                <h2 class="section-title">Projects &amp; Architectures</h2>
+                <p class="section-subtitle">Real-world applications, collaborative software systems, and engineering problem-solving.</p>
             </div>
 
             <div class="projects-grid">
-                <article class="project-card" th:each="p : ${projects}">
-                    <div>
-                        <div class="project-top">
-                            <svg class="folder-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                            </svg>
+                <!-- Project 1: RaceHorse Transport Management System (SWP_RHT) -->
+                <article class="project-card spotlight-card" data-project-type="spring">
+                    <div class="project-card-banner">
+                        <div class="project-type-pill">Team Project &bull; Major Coursework</div>
+                        <span class="project-year">2026</span>
+                    </div>
 
-                            <a th:href="${p.link()}" target="_blank" rel="noopener noreferrer" class="project-link-btn" title="View Source on GitHub" aria-label="View Source on GitHub">
-                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <div class="project-main-content">
+                        <div class="project-top">
+                            <div class="project-icon-box">
+                                <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                                 </svg>
-                            </a>
+                            </div>
+
+                            <div class="project-actions">
+                                <a href="https://github.com/hankfwr23r2/SWP_RHT" target="_blank" rel="noopener noreferrer" class="project-link-btn" title="View GitHub Source" aria-label="View Source on GitHub">
+                                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <h3 class="project-title">RaceHorse Transport Management System</h3>
+                        <p class="project-desc">
+                            Cross-border logistics &amp; racehorse transport management platform. Responsible for designing relational database schemas and implementing core REST APIs for driver assignment, transit progress tracking, and final delivery settlement.
+                        </p>
+
+                        <!-- Key Architecture Features -->
+                        <div class="project-highlights-box">
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Designed normalized relational tables with integrity constraints in PostgreSQL.</span>
+                            </div>
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Engineered secure REST endpoints for driver workflow and delivery settlement.</span>
+                            </div>
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Applied layered Spring Boot architecture with robust exception handling.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-footer">
+                        <ul class="project-skills">
+                            <li class="project-skill-tag">Spring Boot</li>
+                            <li class="project-skill-tag">PostgreSQL</li>
+                            <li class="project-skill-tag">Core Java</li>
+                            <li class="project-skill-tag">Database Design</li>
+                            <li class="project-skill-tag">REST APIs</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Project 2: Event Contributing Management System (F Code Club) -->
+                <article class="project-card spotlight-card" data-project-type="c-lang">
+                    <div class="project-card-banner">
+                        <div class="project-type-pill pill-club">Club Project &bull; F Code Community</div>
+                        <span class="project-year">2026</span>
+                    </div>
+
+                    <div class="project-main-content">
+                        <div class="project-top">
+                            <div class="project-icon-box icon-c-box">
+                                <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+
+                            <div class="project-actions">
+                                <span class="repo-badge-private" title="Internal Club Repository">
+                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                                    </svg>
+                                    <span>Club Internal</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <h3 class="project-title">Event Contributing Management System</h3>
+                        <p class="project-desc">
+                            High-efficiency management application in C developed collaboratively within the F Code club. Facilitates member event tracking, contribution history calculation, and fast search filtering algorithms.
+                        </p>
+
+                        <!-- Key Architecture Features -->
+                        <div class="project-highlights-box">
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Built multi-criteria event search &amp; filter logic optimized for memory footprint.</span>
+                            </div>
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Implemented automated event participation and history logging for club members.</span>
+                            </div>
+                            <div class="highlight-point">
+                                <span class="check-bullet">&check;</span>
+                                <span>Applied robust data structures, file persistence, and Git collaboration workflows.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-footer">
+                        <ul class="project-skills">
+                            <li class="project-skill-tag">C Language</li>
+                            <li class="project-skill-tag">Data Structures</li>
+                            <li class="project-skill-tag">Algorithms</li>
+                            <li class="project-skill-tag">Git</li>
+                            <li class="project-skill-tag">File I/O</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Dynamic Projects loop if any additional project was added via DB -->
+                <article class="project-card spotlight-card" th:each="p : ${projects}" th:if="${p.name() != 'RaceHorse Transport Management System' and p.name() != 'Event Contributing Management System'}">
+                    <div class="project-card-banner">
+                        <div class="project-type-pill">Project</div>
+                        <span class="project-year" th:text="${#temporals.format(p.createdAt(), 'yyyy')}">2026</span>
+                    </div>
+
+                    <div class="project-main-content">
+                        <div class="project-top">
+                            <div class="project-icon-box">
+                                <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                </svg>
+                            </div>
+
+                            <div class="project-actions" th:if="${p.link() != null and !p.link().isBlank()}">
+                                <a th:href="${p.link()}" target="_blank" rel="noopener noreferrer" class="project-link-btn" title="View Source" aria-label="View Source on GitHub">
+                                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
 
                         <h3 class="project-title" th:text="${p.name()}">Project Title</h3>
                         <p class="project-desc" th:text="${p.description()}">Detailed project description goes here...</p>
                     </div>
 
-                    <ul class="project-skills">
-                        <li class="project-skill-tag" th:each="s : ${p.skills()}" th:text="${s}">Spring Boot</li>
-                    </ul>
+                    <div class="project-footer">
+                        <ul class="project-skills">
+                            <li class="project-skill-tag" th:each="s : ${p.skills()}" th:text="${s}">Spring Boot</li>
+                        </ul>
+                    </div>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         EXPERIENCE & ACTIVITIES TIMELINE
+         ========================================================================== -->
+    <section class="section" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// 05. EXPERIENCE &amp; ACTIVITIES</span>
+                <h2 class="section-title">Growth Through Practical Building</h2>
+                <p class="section-subtitle">Active involvement in software communities, academic clubs, and collaborative engineering.</p>
+            </div>
+
+            <div class="timeline-container">
+                <!-- Timeline Item 1: F Code Club -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-card spotlight-card">
+                        <div class="timeline-header">
+                            <div>
+                                <span class="timeline-meta">F Code &bull; FPT University Tech Community</span>
+                                <h3 class="timeline-title">Active Member</h3>
+                            </div>
+                            <span class="timeline-date-badge">Jul 2026 - Present</span>
+                        </div>
+                        <p class="timeline-desc">
+                            Participating in software development workshops, internal hackathons, and programming activities. Collaborated with peers on club systems and engineering challenges.
+                        </p>
+                        <div class="timeline-project-highlight">
+                            <div class="t-proj-title">Event Contributing Management System</div>
+                            <p class="t-proj-desc">Co-engineered a comprehensive C system managing club event participation, filtering algorithms, and history retention.</p>
+                            <ul class="timeline-bullets">
+                                <li>Implemented fast multi-criteria event search and filter routines.</li>
+                                <li>Structured member event attendance tracking and persistent storage.</li>
+                                <li>Applied algorithm analysis, data structures, and Git collaborative workflows.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2: 9.5AI Club -->
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-card spotlight-card">
+                        <div class="timeline-header">
+                            <div>
+                                <span class="timeline-meta">9.5AI Academic Club</span>
+                                <h3 class="timeline-title">Collaborator</h3>
+                            </div>
+                            <span class="timeline-date-badge">Academic Club</span>
+                        </div>
+                        <p class="timeline-desc">
+                            Collaborating on AI awareness, academic activities, and knowledge sharing with faculty and peers. Fostering cross-disciplinary engineering discussions.
+                        </p>
+                        <div class="timeline-project-highlight">
+                            <div class="t-proj-title">Community &amp; Team Collaboration</div>
+                            <p class="t-proj-desc">Strengthening communication, problem-solving, and cross-functional teamwork beyond classroom requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         EDUCATION & CERTIFICATIONS
+         ========================================================================== -->
+    <section class="section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// 06. EDUCATION &amp; CERTIFICATIONS</span>
+                <h2 class="section-title">Academic &amp; Professional Foundations</h2>
+                <p class="section-subtitle">Structured degree coursework supplemented with internationally recognized certifications.</p>
+            </div>
+
+            <div class="edu-grid">
+                <!-- Education Main Card -->
+                <div class="edu-card spotlight-card">
+                    <div class="edu-card-top">
+                        <div class="edu-badge-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="edu-meta">University Degree</span>
+                            <h3 class="edu-title">FPT University</h3>
+                            <div class="edu-field">Computer Software Engineering</div>
+                        </div>
+                    </div>
+
+                    <div class="edu-details-list">
+                        <div class="edu-detail-row">
+                            <span class="detail-name">Duration:</span>
+                            <span class="detail-val">Jul 2024 &mdash; May 2028</span>
+                        </div>
+                        <div class="edu-detail-row">
+                            <span class="detail-name">Academic GPA:</span>
+                            <span class="detail-val gpa-badge">8.29 / 10.0</span>
+                        </div>
+                        <div class="edu-detail-row">
+                            <span class="detail-name">Key Coursework:</span>
+                            <span class="detail-val">Data Structures &amp; Algorithms, Object-Oriented Programming (Java), Relational Databases (SQL Server / PostgreSQL), Web Development, Software Engineering Architecture.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications Card -->
+                <div class="cert-card spotlight-card">
+                    <div class="cert-card-top">
+                        <div class="cert-badge-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="edu-meta">Verified Credentials</span>
+                            <h3 class="edu-title">Certifications &amp; Courses</h3>
+                            <div class="edu-field">Specialized Technical Badges</div>
+                        </div>
+                    </div>
+
+                    <div class="cert-list">
+                        <!-- Cert 1 -->
+                        <div class="cert-item">
+                            <div class="cert-issuer-badge">AI</div>
+                            <div class="cert-info">
+                                <div class="cert-name">AI For Everyone</div>
+                                <div class="cert-org">DeepLearning.AI &bull; Issued May 2025</div>
+                            </div>
+                        </div>
+
+                        <!-- Cert 2 -->
+                        <div class="cert-item">
+                            <div class="cert-issuer-badge">WEB</div>
+                            <div class="cert-info">
+                                <div class="cert-name">Web Design for Everybody: Basics of Web Development &amp; Coding</div>
+                                <div class="cert-org">University of Michigan</div>
+                            </div>
+                        </div>
+
+                        <!-- Cert 3 -->
+                        <div class="cert-item">
+                            <div class="cert-issuer-badge">IBM</div>
+                            <div class="cert-info">
+                                <div class="cert-name">Generative AI Fundamentals</div>
+                                <div class="cert-org">IBM</div>
+                            </div>
+                        </div>
+
+                        <!-- Cert 4 -->
+                        <div class="cert-item">
+                            <div class="cert-issuer-badge">SDLC</div>
+                            <div class="cert-info">
+                                <div class="cert-name">Software Development Lifecycle</div>
+                                <div class="cert-org">University of Minnesota</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -365,84 +1047,147 @@
     <section class="section" id="contact">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Get In Touch</span>
+                <span class="section-tag">// 07. GET IN TOUCH</span>
                 <h2 class="section-title">Let's Connect &amp; Collaborate</h2>
-                <p class="section-subtitle">Have a project, job opportunity, or just want to discuss backend technology? Drop a message!</p>
+                <p class="section-subtitle">Open for backend internship opportunities, collaborative projects, or tech discussions.</p>
             </div>
 
             <div class="contact-grid">
                 <!-- Contact Direct Info -->
                 <div class="contact-info">
                     <p class="contact-info-desc">
-                        I am currently interested in backend development roles, internships, and collaborative software engineering projects. Feel free to contact me directly via email or send a message using the form.
+                        Whether you are looking to hire a dedicated <strong>Java Backend intern/developer</strong>, collaborate on an interesting project, or simply chat about software engineering, my inbox is always open.
                     </p>
 
                     <div class="contact-methods">
-                        <!-- Email Card -->
-                        <a th:if="${email}" th:href="'mailto:' + ${email}" class="contact-card-link">
-                            <div class="contact-card-icon">
-                                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        <!-- Direct Email Card with 1-click copy -->
+                        <div class="contact-card-box spotlight-card">
+                            <div class="contact-card-left">
+                                <div class="contact-card-icon icon-email">
+                                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="contact-card-title">Email Directly</div>
+                                    <a class="contact-card-val" th:if="${email}" th:href="'mailto:' + ${email}" th:text="${email}">anhquan.tranle06@gmail.com</a>
+                                    <span class="contact-card-val" th:unless="${email}">anhquan.tranle06@gmail.com</span>
+                                </div>
+                            </div>
+                            <button class="copy-email-btn" id="copyEmailBtn" type="button" data-email="anhquan.tranle06@gmail.com" title="Copy email address">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                 </svg>
-                            </div>
-                            <div>
-                                <div class="contact-card-title">Email Directly</div>
-                                <div class="contact-card-val" th:text="${email}">you@example.com</div>
-                            </div>
-                        </a>
+                                <span>Copy</span>
+                            </button>
+                        </div>
 
                         <!-- GitHub Card -->
-                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="contact-card-link">
-                            <div class="contact-card-icon">
-                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                                </svg>
+                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="contact-card-box spotlight-card link-box">
+                            <div class="contact-card-left">
+                                <div class="contact-card-icon icon-github">
+                                    <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="contact-card-title">GitHub</div>
+                                    <div class="contact-card-val">github.com/QuanTran-IT</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="contact-card-title">GitHub</div>
-                                <div class="contact-card-val">Explore Source Repositories</div>
-                            </div>
+                            <svg class="arrow-ext" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
                         </a>
 
-                        <a href="https://www.linkedin.com/in/anh-qu%C3%A2n-tr%E1%BA%A7n-l%C3%AA-0645b9448/" target="_blank" rel="noopener noreferrer" class="contact-card-link">
-                            <div class="contact-card-icon"><span class="linkedin-mark">in</span></div>
-                            <div>
-                                <div class="contact-card-title">LinkedIn</div>
-                                <div class="contact-card-val">View professional profile</div>
+                        <!-- LinkedIn Card -->
+                        <a href="https://www.linkedin.com/in/anh-qu%C3%A2n-tr%E1%BA%A7n-l%C3%AA-0645b9448/" target="_blank" rel="noopener noreferrer" class="contact-card-box spotlight-card link-box">
+                            <div class="contact-card-left">
+                                <div class="contact-card-icon icon-linkedin">
+                                    <span class="linkedin-mark">in</span>
+                                </div>
+                                <div>
+                                    <div class="contact-card-title">LinkedIn</div>
+                                    <div class="contact-card-val">Anh Quân Trần Lê</div>
+                                </div>
                             </div>
+                            <svg class="arrow-ext" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
                         </a>
+
+                        <!-- Location & Timezone -->
+                        <div class="contact-card-box spotlight-card">
+                            <div class="contact-card-left">
+                                <div class="contact-card-icon icon-location">
+                                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="contact-card-title">Location &amp; Timezone</div>
+                                    <div class="contact-card-val">Ho Chi Minh City, Vietnam &bull; ICT (UTC+7)</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Contact Form Card -->
-                <div class="contact-form-container">
+                <div class="contact-form-container spotlight-card">
+                    <div class="form-header">
+                        <h3 class="form-title">Send a Direct Message</h3>
+                        <p class="form-subtitle">Leave your details and I will reply within 24 hours.</p>
+                    </div>
+
                     <!-- Success Notification Banner -->
                     <div class="success-banner" th:if="${success}" role="status">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>Message received! Thank you, I will get back to you shortly.</span>
+                        <div>
+                            <strong>Message successfully received!</strong>
+                            <p>Thank you for reaching out. I will get back to you shortly.</p>
+                        </div>
                     </div>
 
                     <form class="contact-form" th:action="@{/contact}" th:object="${contactForm}" method="post">
                         <div class="form-group">
-                            <label class="form-label" for="email">Your Email Address</label>
-                            <input class="form-control" type="email" id="email" th:field="*{email}" placeholder="you@company.com" required>
+                            <label class="form-label" for="email">
+                                <span>Your Email Address</span>
+                                <span class="required-star">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <svg class="input-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                </svg>
+                                <input class="form-control" type="email" id="email" th:field="*{email}" placeholder="you@company.com" required autocomplete="email">
+                            </div>
                             <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
-                                Invalid email address
+                                Invalid email address format
                             </p>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="message">Message</label>
-                            <textarea class="form-control" id="message" th:field="*{message}" rows="5" placeholder="Hi Quan, I'd like to talk about an opportunity..." required></textarea>
-                            <p class="error-message" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">
-                                Message cannot be blank
-                            </p>
+                            <label class="form-label" for="message">
+                                <span>Your Message</span>
+                                <span class="required-star">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <textarea class="form-control" id="message" th:field="*{message}" rows="5" placeholder="Hi Quan, I saw your portfolio and would like to discuss an opportunity or project..." required></textarea>
+                            </div>
+                            <div class="form-field-footer">
+                                <p class="error-message" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">
+                                    Message cannot be blank
+                                </p>
+                                <span class="char-count" id="charCount">0 characters</span>
+                            </div>
                         </div>
 
-                        <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 8px;">
-                            <span>Send Message</span>
+                        <button class="btn btn-primary submit-btn" type="submit">
+                            <span>Send Message Now</span>
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
@@ -455,28 +1200,158 @@
 </main>
 
 <!-- ==========================================================================
+     RESUME / CV PREVIEW MODAL
+     ========================================================================== -->
+<div class="modal-overlay" id="cvModal" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <div>
+                <span class="modal-tag">Curriculum Vitae</span>
+                <h3 class="modal-title" id="cvModalTitle" th:text="${name} + ' - Resume'">Tran Le Anh Quan - Resume</h3>
+            </div>
+            <div class="modal-actions-top">
+                <button class="btn btn-sm btn-secondary" onclick="window.print()" type="button" title="Print or save as PDF">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    <span>Print / PDF</span>
+                </button>
+                <button class="modal-close-btn" id="closeCvBtn" type="button" aria-label="Close CV Modal">&times;</button>
+            </div>
+        </div>
+
+        <div class="modal-body printable-cv">
+            <!-- CV Header -->
+            <div class="cv-summary-section">
+                <div class="cv-person-details">
+                    <h2 class="cv-name" th:text="${name}">Tran Le Anh Quan</h2>
+                    <p class="cv-role" th:text="${title}">Java Backend Developer</p>
+                    <div class="cv-contact-row">
+                        <span th:if="${email}" th:text="${email}">anhquan.tranle06@gmail.com</span> &bull;
+                        <span>Ho Chi Minh City, Vietnam</span> &bull;
+                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer">github.com/QuanTran-IT</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CV Education -->
+            <div class="cv-section">
+                <h4 class="cv-section-title">Education</h4>
+                <div class="cv-item">
+                    <div class="cv-item-header">
+                        <strong>FPT University</strong>
+                        <span>Jul 2024 &mdash; May 2028</span>
+                    </div>
+                    <div class="cv-sub">Bachelor of Software Engineering | Cumulative GPA: <strong>8.29 / 10</strong></div>
+                </div>
+            </div>
+
+            <!-- CV Technical Skills -->
+            <div class="cv-section">
+                <h4 class="cv-section-title">Technical Skills</h4>
+                <p><strong>Languages:</strong> Java (Core, OOP, Collections, Streams), C, SQL</p>
+                <p><strong>Backend:</strong> Spring Boot, Spring MVC, RESTful APIs, Hibernate / JPA, MVC Pattern</p>
+                <p><strong>Databases:</strong> PostgreSQL, Microsoft SQL Server, Database Design, Relational Modeling</p>
+                <p><strong>Tools &amp; Workflows:</strong> Git, GitHub, Maven, Postman, Linux basics</p>
+            </div>
+
+            <!-- CV Projects -->
+            <div class="cv-section">
+                <h4 class="cv-section-title">Key Projects</h4>
+                <div class="cv-item">
+                    <div class="cv-item-header">
+                        <strong>RaceHorse Transport Management System</strong>
+                        <span>Team Project (2026)</span>
+                    </div>
+                    <p class="cv-desc">Cross-border logistics management system for racehorses.</p>
+                    <ul class="cv-bullets">
+                        <li>Designed PostgreSQL database schema with normalization and relational integrity.</li>
+                        <li>Implemented REST APIs for the driver assignment module and post-delivery settlement workflow.</li>
+                        <li>Tech stack: Java 21, Spring Boot, PostgreSQL, JPA, Git.</li>
+                    </ul>
+                </div>
+
+                <div class="cv-item">
+                    <div class="cv-item-header">
+                        <strong>Event Contributing Management System</strong>
+                        <span>F Code Community (2026)</span>
+                    </div>
+                    <p class="cv-desc">Event management system in C for tracking club member contributions.</p>
+                    <ul class="cv-bullets">
+                        <li>Implemented event filtering, search logic, and member activity history persistence.</li>
+                        <li>Applied data structures, algorithms, and collaborative Git workflow.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CV Activities & Certifications -->
+            <div class="cv-section">
+                <h4 class="cv-section-title">Activities &amp; Certifications</h4>
+                <p><strong>Activities:</strong> Member at F Code (FPT University), Collaborator at 9.5AI Club.</p>
+                <p><strong>Certifications:</strong> AI For Everyone (DeepLearning.AI), Web Design for Everybody (Univ. of Michigan), Generative AI Fundamentals (IBM), SDLC (Univ. of Minnesota).</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="modalDismissBtn" type="button">Close Preview</button>
+            <a class="btn btn-primary" th:if="${email}" th:href="'mailto:' + ${email} + '?subject=Job%20Opportunity'">
+                <span>Contact via Email</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
      FOOTER
      ========================================================================== -->
 <footer class="site-footer">
     <div class="container footer-container">
-        <p>© <span th:text="${name}">Tran Le Anh Quan</span>. All rights reserved.</p>
-        <div class="footer-tech">
-            <span>Powered by</span>
-            <span class="gradient-text" style="font-weight: 700;">Spring Boot &amp; Thymeleaf</span>
+        <div class="footer-left">
+            <div class="footer-brand">
+                <span class="avatar-bracket">&lt;</span>
+                <span th:text="${name}">Tran Le Anh Quan</span>
+                <span class="avatar-bracket">/&gt;</span>
+            </div>
+            <p class="footer-copy">
+                &copy; <span id="currentYear">2026</span> <span th:text="${name}">Tran Le Anh Quan</span>. All rights reserved.
+            </p>
         </div>
-        <a class="footer-back-to-top" href="#top">
-            <span>Back to top</span>
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-        </a>
+
+        <div class="footer-tech">
+            <span class="tech-tag">Java 21</span>
+            <span class="tech-tag">Spring Boot 3</span>
+            <span class="tech-tag">Thymeleaf</span>
+        </div>
+
+        <div class="footer-right">
+            <a class="footer-back-to-top" href="#top">
+                <span>Back to top</span>
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                </svg>
+            </a>
+        </div>
     </div>
 </footer>
 
-<!-- Toast message for copy action -->
-<div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">✓ JSON copied to clipboard!</div>
+<!-- Floating Back to Top Button with Circular Progress -->
+<button class="floating-top-btn" id="floatingTopBtn" type="button" aria-label="Back to top">
+    <svg class="progress-ring" width="48" height="48" viewBox="0 0 48 48">
+        <circle class="progress-ring-bg" cx="24" cy="24" r="20" fill="none" stroke-width="3"/>
+        <circle class="progress-ring-bar" id="progressRingBar" cx="24" cy="24" r="20" fill="none" stroke-width="3"/>
+    </svg>
+    <svg class="top-arrow-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+</button>
 
-<!-- Scripts -->
+<!-- Universal Toast Message -->
+<div class="toast-msg" id="toastMsg" role="alert" aria-live="polite">
+    <span class="toast-icon">&check;</span>
+    <span class="toast-text" id="toastText">Action successful!</span>
+</div>
+
+<!-- Interactive Scripts -->
 <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
