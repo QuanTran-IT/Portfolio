@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" th:content="${name} + ' - ' + ${title} + ' | Portfolio, Projects, Skills & Experience'">
-    <title th:text="${name} + ' | ' + ${title}">Tran Le Anh Quan | Java Backend Developer</title>
+    <meta name="description" th:content="${page.name} + ' - ' + ${page.title} + ' | Portfolio, Projects, Skills & Experience'">
+    <title th:text="${page.name} + ' | ' + ${page.title}">Tran Le Anh Quan | Java Backend Developer</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
                 <span class="avatar-bracket">/&gt;</span>
             </span>
             <span class="brand-text">
-                <span class="brand-name" th:text="${name}">Tran Le Anh Quan</span>
+                <span class="brand-name" th:text="${page.name}">Tran Le Anh Quan</span>
                 <span class="brand-sub">Portfolio</span>
             </span>
         </a>
@@ -88,7 +88,7 @@
             </button>
 
             <!-- GitHub Profile Link -->
-            <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-secondary nav-github-btn" aria-label="GitHub Profile">
+            <a th:if="${page.githubUrl}" th:href="${page.githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-secondary nav-github-btn" aria-label="GitHub Profile">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
                 </svg>
@@ -138,7 +138,7 @@
                         <span class="greeting-wave">👋</span> Hello world, I'm
                     </p>
                     <h1 class="hero-name">
-                        <span class="gradient-text" th:text="${name}">Tran Le Anh Quan</span>
+                        <span class="gradient-text" th:text="${page.name}">Tran Le Anh Quan</span>
                     </h1>
                 </div>
             </div>
@@ -146,7 +146,7 @@
             <!-- Animated Dynamic Title -->
             <div class="hero-title-box">
                 <span class="hero-title-prefix">&gt; </span>
-                <span class="hero-title-dynamic" id="typewriterText" th:text="${title}">Java Backend Developer</span>
+                <span class="hero-title-dynamic" id="typewriterText" th:text="${page.title}">Java Backend Developer</span>
                 <span class="typewriter-cursor" aria-hidden="true">_</span>
             </div>
 
@@ -327,7 +327,7 @@
                 <!-- Main Bio Card -->
                 <div class="about-main-card spotlight-card">
                     <div class="about-card-badge">Engineering Journey</div>
-                    <p class="about-lead" th:text="${about}">
+                    <p class="about-lead" th:text="${page.about}">
                         I am a Software Engineering student at FPT University focused on Java backend development. I have hands-on experience with Spring Boot, REST APIs, and relational database design using PostgreSQL and Microsoft SQL Server. Through academic and personal projects, I have also worked with C, MVC architecture, data structures, algorithms, and frontend implementation. I am looking for opportunities to contribute to real-world software and grow as an engineer.
                     </p>
                     <div class="about-details">
@@ -693,10 +693,10 @@
             </div>
 
             <!-- Fallback Dynamic Skill Pills for DB-seeded skills -->
-            <div class="skills-all-pills" th:if="${skills != null and !skills.isEmpty()}">
+            <div class="skills-all-pills" th:if="${page.skills != null and !page.skills.isEmpty()}">
                 <span class="skills-all-title">Database Synced Skill Tags:</span>
                 <ul class="skills-list">
-                    <li class="skill-pill" th:each="s : ${skills}">
+                    <li class="skill-pill" th:each="s : ${page.skills}">
                         <span class="skill-indicator"></span>
                         <span th:text="${s}">Java</span>
                     </li>
@@ -834,7 +834,7 @@
                 </article>
 
                 <!-- Dynamic Projects loop if any additional project was added via DB -->
-                <article class="project-card spotlight-card" th:each="p : ${projects}" th:if="${p.name() != 'RaceHorse Transport Management System' and p.name() != 'Event Contributing Management System'}">
+                <article class="project-card spotlight-card" th:each="p : ${page.projects}" th:if="${p.name() != 'RaceHorse Transport Management System' and p.name() != 'Event Contributing Management System'}">
                     <div class="project-card-banner">
                         <div class="project-type-pill">Project</div>
                         <span class="project-year" th:text="${#temporals.format(p.createdAt(), 'yyyy')}">2026</span>
@@ -1070,8 +1070,8 @@
                                 </div>
                                 <div>
                                     <div class="contact-card-title">Email Directly</div>
-                                    <a class="contact-card-val" th:if="${email}" th:href="'mailto:' + ${email}" th:text="${email}">anhquan.tranle06@gmail.com</a>
-                                    <span class="contact-card-val" th:unless="${email}">anhquan.tranle06@gmail.com</span>
+                                    <a class="contact-card-val" th:if="${page.email}" th:href="'mailto:' + ${page.email}" th:text="${page.email}">anhquan.tranle06@gmail.com</a>
+                                    <span class="contact-card-val" th:unless="${page.email}">anhquan.tranle06@gmail.com</span>
                                 </div>
                             </div>
                             <button class="copy-email-btn" id="copyEmailBtn" type="button" data-email="anhquan.tranle06@gmail.com" title="Copy email address">
@@ -1084,7 +1084,7 @@
                         </div>
 
                         <!-- GitHub Card -->
-                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="contact-card-box spotlight-card link-box">
+                        <a th:if="${page.githubUrl}" th:href="${page.githubUrl}" target="_blank" rel="noopener noreferrer" class="contact-card-box spotlight-card link-box">
                             <div class="contact-card-left">
                                 <div class="contact-card-icon icon-github">
                                     <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
@@ -1207,7 +1207,7 @@
         <div class="modal-header">
             <div>
                 <span class="modal-tag">Curriculum Vitae</span>
-                <h3 class="modal-title" id="cvModalTitle" th:text="${name} + ' - Resume'">Tran Le Anh Quan - Resume</h3>
+                <h3 class="modal-title" id="cvModalTitle" th:text="${page.name} + ' - Resume'">Tran Le Anh Quan - Resume</h3>
             </div>
             <div class="modal-actions-top">
                 <button class="btn btn-sm btn-secondary" onclick="window.print()" type="button" title="Print or save as PDF">
@@ -1224,12 +1224,12 @@
             <!-- CV Header -->
             <div class="cv-summary-section">
                 <div class="cv-person-details">
-                    <h2 class="cv-name" th:text="${name}">Tran Le Anh Quan</h2>
-                    <p class="cv-role" th:text="${title}">Java Backend Developer</p>
+                    <h2 class="cv-name" th:text="${page.name}">Tran Le Anh Quan</h2>
+                    <p class="cv-role" th:text="${page.title}">Java Backend Developer</p>
                     <div class="cv-contact-row">
-                        <span th:if="${email}" th:text="${email}">anhquan.tranle06@gmail.com</span> &bull;
+                        <span th:if="${page.email}" th:text="${page.email}">anhquan.tranle06@gmail.com</span> &bull;
                         <span>Ho Chi Minh City, Vietnam</span> &bull;
-                        <a th:if="${githubUrl}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer">github.com/QuanTran-IT</a>
+                        <a th:if="${page.githubUrl}" th:href="${page.githubUrl}" target="_blank" rel="noopener noreferrer">github.com/QuanTran-IT</a>
                     </div>
                 </div>
             </div>
@@ -1294,7 +1294,7 @@
 
         <div class="modal-footer">
             <button class="btn btn-secondary" id="modalDismissBtn" type="button">Close Preview</button>
-            <a class="btn btn-primary" th:if="${email}" th:href="'mailto:' + ${email} + '?subject=Job%20Opportunity'">
+            <a class="btn btn-primary" th:if="${page.email}" th:href="'mailto:' + ${page.email} + '?subject=Job%20Opportunity'">
                 <span>Contact via Email</span>
             </a>
         </div>
@@ -1309,11 +1309,11 @@
         <div class="footer-left">
             <div class="footer-brand">
                 <span class="avatar-bracket">&lt;</span>
-                <span th:text="${name}">Tran Le Anh Quan</span>
+                <span th:text="${page.name}">Tran Le Anh Quan</span>
                 <span class="avatar-bracket">/&gt;</span>
             </div>
             <p class="footer-copy">
-                &copy; <span id="currentYear">2026</span> <span th:text="${name}">Tran Le Anh Quan</span>. All rights reserved.
+                &copy; <span id="currentYear">2026</span> <span th:text="${page.name}">Tran Le Anh Quan</span>. All rights reserved.
             </p>
         </div>
 
